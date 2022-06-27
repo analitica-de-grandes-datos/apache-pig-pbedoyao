@@ -23,5 +23,5 @@ Columna = FOREACH TblPregunta GENERATE ConjuntoLetras;
 columnaSeparada = FOREACH Columna GENERATE FLATTEN(TOKENIZE(ConjuntoLetras)) AS letra;
 columnaFiltrada = FILTER columnaSeparada BY (letra MATCHES '.*[a-z].*');
 Agrupacion = GROUP columnaFiltrada BY letra;
-ContarLetra = FOREACH Agrupacion GENERATE group, COUNT(Agrupacion);
+ContarLetra = FOREACH Agrupacion GENERATE group, COUNT(columnaFiltrada);
 STORE ContarLetra INTO 'output' USING PigStorage(',');
