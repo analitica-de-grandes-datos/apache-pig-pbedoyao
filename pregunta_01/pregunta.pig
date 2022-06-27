@@ -12,3 +12,13 @@ $ pig -x local -f pregunta.pig
 
         >>> Escriba su respuesta a partir de este punto <<<
 */
+
+TblPregunta = LOAD 'data.tsv' USING PigStorage('\t')
+    AS (    letra:chararray,
+            fecha:chararray,
+            valor:int
+        );
+
+Unionletras = GROUP TblPregunta BY letra;
+Contarletras = FOREACH Unionletras GENERATE group, COUNT(TblPregunta);
+STORE Contarletras INTO 'output' USING PigStorage(',');
