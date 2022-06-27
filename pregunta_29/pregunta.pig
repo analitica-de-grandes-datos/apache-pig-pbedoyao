@@ -44,6 +44,30 @@ TblPregunta = LOAD 'data.csv' USING PigStorage(',')
             Valor:chararray 
     );
 
+writefile Mes.tsv
+1	Jan	Ene
+2	Feb	Feb
+3	Mar	Mar
+4	Apr	Abr
+5	May	May
+6	Jun	Jun
+7	Jul	Jul
+8	Aug	Ago
+9	Sep	Sep
+10	Oct	Oct
+11	Nov	Nov
+12	Dec	Dic
+
+
+TblMes = LOAD 'Mes.tsv' USING PigStorage('\t') 
+AS ( 
+        Indice: indice,
+        NombreIng:chararray,
+        NombreEsp:chararray,
+
+);
+
+
  
 sub_conjunto = FOREACH TblPregunta GENERATE Fecha, LOWER(ToString(ToDate(fecha), 'MMM')) AS nombre_mes, SUBSTRING(fecha,5,7) AS mes, GetMonth(ToDate(fecha)) AS nmes;
 sub_conjunto = FOREACH sub_conjunto GENERATE fecha, REPLACE(nombre_mes, 'jan', 'ene') AS nombre_mes, mes, nmes;
