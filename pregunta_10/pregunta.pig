@@ -35,4 +35,4 @@ Columnas = FOREACH TblPregunta GENERATE Nombre, Apellido;
 Columna = FOREACH Columnas GENERATE Nombre, SIZE(Nombre) AS tamano;
 ColumnasOrdenadas = ORDER Columnas BY Nombre asc;
 ColumnasTop = LIMIT Columnas 5;
-STORE Columna INTO 'output' USING PigStorage(',');
+STORE ColumnasTop INTO 'output' USING PigStorage(',');
