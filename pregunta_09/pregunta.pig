@@ -42,6 +42,5 @@ TblPregunta = LOAD 'data.tsv' USING PigStorage(',')
             Valor:chararray
     );
 
-Columnas = FOREACH TblPregunta GENERATE Nombre, Apellido;
-Columna = FOREACH Columnas GENERATE CONCAT(Nombre,'@',Apellido);
+Columna = FOREACH TblPregunta GENERATE CONCAT(Nombre,'@',Apellido);
 STORE Columna INTO 'output' USING PigStorage(',');
