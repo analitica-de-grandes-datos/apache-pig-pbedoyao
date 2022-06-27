@@ -21,3 +21,16 @@ $ pig -x local -f pregunta.pig
         >>> Escriba su respuesta a partir de este punto <<<
 */
 
+TblPregunta = LOAD 'data.csv' USING PigStorage(',') 
+    AS ( 
+            Indice: int,
+            Nombre:chararray,
+            Apellido:chararray,
+            Fecha:chararray,
+            Color:chararray,
+            Valor:chararray 
+    );
+
+Columnas = FOREACH TblPregunta GENERATE Nombre; 
+FiltroColumna = FILTER Columnas BY SUBSTRING(Nombre, 0, 1) >= 'M'; 
+STORE FiltroColumna INTO 'output' USING PigStorage(',');

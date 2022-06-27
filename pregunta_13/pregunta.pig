@@ -22,3 +22,16 @@ $ pig -x local -f pregunta.pig
         /* >>> Escriba su respuesta a partir de este punto <<< */
 */
 
+TblPregunta = LOAD 'data.csv' USING PigStorage(',')
+    AS (
+            Indice: int,
+            Nombre:chararray,
+            Apellido:chararray,
+            Fecha:chararray,
+            Color:chararray,
+            Valor:chararray
+        );
+
+Columna = FOREACH TblPregunta GENERATE Color;
+FiltroColumna = FILTER Columna BY (Color MATCHES '.*^[bB].*'); 
+STORE FiltroColumna INTO 'output' USING PigStorage(',');

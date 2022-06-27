@@ -34,3 +34,19 @@ $ pig -x local -f pregunta.pig
         >>> Escriba su respuesta a partir de este punto <<<
 */
 
+TblPregunta = LOAD 'data.csv' USING PigStorage(',') 
+    AS ( 
+            Indice: int,
+            Nombre:chararray,
+            Apellido:chararray,
+            Fecha:chararray,
+            Color:chararray,
+            Valor:chararray 
+    );
+
+ 
+sub_conjunto = FOREACH TblPregunta GENERATE Fecha, LOWER(ToString(ToDate(fecha), 'MMM')) AS nombre_mes, SUBSTRING(fecha,5,7) AS mes, GetMonth(ToDate(fecha)) AS nmes;
+sub_conjunto = FOREACH sub_conjunto GENERATE fecha, REPLACE(nombre_mes, 'jan', 'ene') AS nombre_mes, mes, nmes;
+sub_conjunto = FOREACH sub_conjunto GENERATE fecha, REPLACE(nombre_mes, 'apr', 'abr') AS nombre_mes, mes, nmes;
+sub_conjunto = FOREACH sub_conjunto GENERATE fecha, REPLACE(nombre_mes, 'aug', 'ago') AS nombre_mes, mes, nmes;
+sub_conjunto = FOREACH sub_conjunto GENERATE fecha, REPLACE(nombre_mes, 'dec', 'dic') AS nombre_mes, mes, nmes;

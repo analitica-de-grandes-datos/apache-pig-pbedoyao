@@ -14,3 +14,16 @@ $ pig -x local -f pregunta.pig
         >>> Escriba su respuesta a partir de este punto <<<
 */
 
+TblPregunta = LOAD 'data.csv' USING PigStorage(',') 
+    AS ( 
+            Indice: int,
+            Nombre:chararray,
+            Apellido:chararray,
+            Fecha:chararray,
+            Color:chararray,
+            Valor:chararray 
+    );
+ 
+Columnas = GROUP TblPregunta BY GetYear(Fecha) As ano;
+ContarAno = FOREACH Columnas GENERATE group, COUNT(ano); 
+STORE ContarAno INTO 'output' USING PigStorage(',');

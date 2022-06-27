@@ -20,3 +20,16 @@ $ pig -x local -f pregunta.pig
         /* >>> Escriba su respuesta a partir de este punto <<< */
 */
 
+TblPregunta = LOAD 'data.csv' USING PigStorage(',') 
+    AS ( 
+            Indice: int,
+            Nombre:chararray,
+            Apellido:chararray,
+            Fecha:chararray,
+            Color:chararray,
+            Valor:chararray 
+    );
+
+Columnas= FOREACH TblPregunta GENERATE Nombre, Color; 
+FiltroColumnas = FILTER Columnas BY Color IN ('blue', 'black'); 
+STORE FiltroColumnas INTO 'output' USING PigStorage(',');
