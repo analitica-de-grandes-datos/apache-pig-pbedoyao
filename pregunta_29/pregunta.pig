@@ -44,22 +44,21 @@ TblPregunta = LOAD 'data.csv' USING PigStorage(',')
             Valor:chararray 
     );
 
-writefile Mes.tsv
-1	Jan	Ene
-2	Feb	Feb
-3	Mar	Mar
-4	Apr	Abr
-5	May	May
-6	Jun	Jun
-7	Jul	Jul
-8	Aug	Ago
-9	Sep	Sep
-10	Oct	Oct
-11	Nov	Nov
-12	Dec	Dic
+%%writefile /Mes.csv
+1,Jan,Ene
+2,Feb,Feb
+3,Mar,Mar
+4,Apr,Abr
+5,May,May
+6,Jun,Jun
+7,Jul,Jul
+8,Aug,Ago
+9,Sep,Sep
+10,Oct,Oct
+11,Nov,Nov
+12,Dec,Dic
 
-
-TblMes = LOAD 'Mes.tsv' USING PigStorage('\t') 
+TblMes = LOAD 'Mes.csv' USING PigStorage(',') 
 AS ( 
         Indice: indice,
         NombreIng:chararray,
