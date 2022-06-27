@@ -20,7 +20,6 @@ $ pig -x local -f pregunta.pig
         >>> Escriba su respuesta a partir de este punto <<<
 */
 
-
 TblPregunta = LOAD 'data.csv' USING PigStorage(',') 
     AS ( 
             Indice: int,
@@ -31,5 +30,5 @@ TblPregunta = LOAD 'data.csv' USING PigStorage(',')
             Valor:chararray 
     );
 
-Columnas = FOREACH TblPregunta GENERATE INDEXOF(nombre,'ia', 1); 
+Columnas = FOREACH TblPregunta GENERATE INDEXOF(Nombre,'ia', 1); 
 STORE Columnas INTO 'output' USING PigStorage(',');

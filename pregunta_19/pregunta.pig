@@ -34,5 +34,5 @@ TblPregunta = LOAD 'data.csv' USING PigStorage(',')
     );
 
 Columnas= FOREACH TblPregunta GENERATE Nombre, Color; 
-FiltroColumnas= FILTER sub_conjunto BY (Color MATCHES '.*^[bB].*'); 
+FiltroColumnas= FILTER Columnas BY (Color MATCHES '.*^[bB].*'); 
 STORE FiltroColumnas INTO 'output' USING PigStorage(',');
