@@ -24,7 +24,7 @@ TblPregunta = LOAD 'data.tsv' USING PigStorage('\t')
             lista:chararray
     );
 
-Columnas= FOREACH ejercicio GENERATE FLATTEN(TOKENIZE(conjunto, ',')) AS ConjuntoSeparada, FLATTEN(TOKENIZE(lista, ',')) AS listaSeparada;
+Columnas= FOREACH TblPregunta GENERATE FLATTEN(TOKENIZE(conjunto, ',')) AS ConjuntoSeparada, FLATTEN(TOKENIZE(lista, ',')) AS listaSeparada;
 ColumnasAgrupadas = FOREACH Columnas GENERATE REPLACE(ConjuntoSeparada, '([^a-zA-Z\\s]+)','') AS letra, REPLACE(listaSeparada,'([^a-zA-Z\\s]+)','') AS clave;
 ColumnaTupla = FOREACH ColumnasAgrupadas GENERATE TOTUPLE(letra,clave) as tupla; 
 ColumnaTuplaAgrupada = GROUP ColumnaTupla BY tupla;

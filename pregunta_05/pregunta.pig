@@ -20,7 +20,7 @@ TblPregunta = LOAD 'data.tsv' USING PigStorage('\t')
     );
 
 Columna = FOREACH TblPregunta GENERATE ConjuntoLetras;
-columnaSeparada = FOREACH Columna GENERATE FLATTEN(TOKENIZE(conjunto)) AS letra;
+columnaSeparada = FOREACH Columna GENERATE FLATTEN(TOKENIZE(ConjuntoLetras)) AS letra;
 columnaFiltrada = FILTER columnaSeparada BY (letra MATCHES '.*[a-z].*');
 Agrupacion = GROUP columnaFiltrada BY letra;
 ContarLetra = FOREACH Agrupacion GENERATE group, COUNT(Agrupacion);
