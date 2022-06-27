@@ -12,3 +12,16 @@ $ pig -x local -f pregunta.pig
 
         >>> Escriba su respuesta a partir de este punto <<<
 */
+TblPregunta = LOAD 'data.tsv' USING PigStorage('\t')
+    AS (
+            letra:chararray,
+            ConjuntoLetras:chararray,
+            lista:int
+    );
+
+Columna = FOREACH TblPregunta GENERATE ConjuntoLetras;
+columnaSeparada = FOREACH Columna GENERATE FLATTEN(TOKENIZE(conjunto)) AS letra;
+columnaFiltrada = FILTER columnaSeparada BY (letra MATCHES '.*[a-z].*');
+Agrupacion = GROUP columnaFiltrada BY letra;
+ContarLetra = FOREACH Agrupacion GENERATE group, COUNT(Agrupacion);
+STORE ContarLetra INTO 'output' USING PigStorage(',');

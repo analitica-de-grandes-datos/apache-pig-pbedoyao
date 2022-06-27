@@ -33,3 +33,16 @@ $ pig -x local -f pregunta.pig
         >>> Escriba su respuesta a partir de este punto <<<
 */
 
+TblPregunta = LOAD 'data.csv' USING PigStorage(',')
+    AS (
+            Indice: int,
+            Nombre:chararray,
+            Apellido:chararray,
+            Fecha:chararray,
+            Color:chararray,
+            Valor:chararray
+    );
+
+Columnas = FOREACH TblPregunta GENERATE Apellido , UPPER(Apellido) AS Mayuscula, LOWER(Apellido) AS Minuscula;
+ColumnasOrdenada = ORDER Columnas BY Apellido, Mayuscula, Minuscula asc; 
+STORE ColumnasOrdenada INTO 'output' USING PigStorage(',');

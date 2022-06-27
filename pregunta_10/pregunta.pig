@@ -20,4 +20,18 @@ $ pig -x local -f pregunta.pig
 
         >>> Escriba su respuesta a partir de este punto <<<
 */
+TblPregunta = LOAD 'data.tsv' USING PigStorage(',')
+    AS (
+            Indice: int,
+            Nombre:chararray,
+            Apellido:chararray,
+            Fecha:chararray,
+            Color:chararray,
+            Valor:chararray
+    );
 
+Columnas = FOREACH TblPregunta GENERATE Nombre, Apellido;
+Columna = FOREACH Columnas GENERATE Nombre, SIZE(Nombre) tamano;
+ColumnasOrdenadas = ORDER Columnas BY Nombre asc;
+ColumnasTop = LIMIT Columnas 5;
+STORE Columna INTO 'output' USING PigStorage(',');
