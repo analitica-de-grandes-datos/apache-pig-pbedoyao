@@ -44,20 +44,6 @@ TblPregunta = LOAD 'data.csv' USING PigStorage(',')
             Valor:chararray 
     );
 
-%%writefile /Mes.csv
-1,Jan,Ene
-2,Feb,Feb
-3,Mar,Mar
-4,Apr,Abr
-5,May,May
-6,Jun,Jun
-7,Jul,Jul
-8,Aug,Ago
-9,Sep,Sep
-10,Oct,Oct
-11,Nov,Nov
-12,Dec,Dic
-
 TblMes = LOAD 'Mes.csv' USING PigStorage(',') 
 AS ( 
         Indice: indice,
@@ -65,11 +51,11 @@ AS (
         NombreEsp:chararray,
 
 );
-
-
  
-sub_conjunto = FOREACH TblPregunta GENERATE Fecha, LOWER(ToString(ToDate(fecha), 'MMM')) AS nombre_mes, SUBSTRING(fecha,5,7) AS mes, GetMonth(ToDate(fecha)) AS nmes;
-sub_conjunto = FOREACH sub_conjunto GENERATE fecha, REPLACE(nombre_mes, 'jan', 'ene') AS nombre_mes, mes, nmes;
-sub_conjunto = FOREACH sub_conjunto GENERATE fecha, REPLACE(nombre_mes, 'apr', 'abr') AS nombre_mes, mes, nmes;
-sub_conjunto = FOREACH sub_conjunto GENERATE fecha, REPLACE(nombre_mes, 'aug', 'ago') AS nombre_mes, mes, nmes;
-sub_conjunto = FOREACH sub_conjunto GENERATE fecha, REPLACE(nombre_mes, 'dec', 'dic') AS nombre_mes, mes, nmes;
+Columnas = FOREACH TblPregunta GENERATE Fecha, LOWER(ToString(ToDate(fecha), 'MMM')) AS NombreMes, 
+                                                   SUBSTRING(fecha,5,7) AS Mes0, 
+                                                   GetMonth(ToDate(fecha)) AS NumeroMes;
+Mes = FOREACH TblMes GENERATE  NombreIng, NombreEsp;
+Resultado = CROSS Columnas, Mes;
+ResultadoFiltrado = FILTER Resultado BY (NombreMes == NombreIng); 
+ResultadoFinal = FOREACH ResultadoFiltrado GENERATE Fecha, NombreEsp, Mes0, NumeroMes
