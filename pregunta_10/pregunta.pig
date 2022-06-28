@@ -32,6 +32,6 @@ TblPregunta = LOAD 'data.csv' USING PigStorage(',')
         );
 
 Columna = FOREACH TblPregunta GENERATE Apellido,  SIZE(Apellido) AS tamano;
-ColumnasOrdenadas = ORDER Columna BY Apellido asc;
+ColumnasOrdenadas = ORDER Columna BY tamano desc Apellido asc;
 ColumnasTop = LIMIT ColumnasOrdenadas 5;
 STORE ColumnasTop INTO 'output' USING PigStorage(',');
