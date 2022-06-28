@@ -29,10 +29,9 @@ TblPregunta = LOAD 'data.csv' USING PigStorage(',')
             Fecha:chararray,
             Color:chararray,
             Valor:chararray
-    );
+        );
 
-Columnas = FOREACH TblPregunta GENERATE Nombre, Apellido;
-Columna = FOREACH Columnas GENERATE Nombre, SIZE(Nombre) AS tamano;
-ColumnasOrdenadas = ORDER Columna BY Nombre asc;
+Columna = FOREACH TblPregunta GENERATE Apellido,  SIZE(Apellido) AS tamano;
+ColumnasOrdenadas = ORDER Columna BY Apellido asc;
 ColumnasTop = LIMIT ColumnasOrdenadas 5;
 STORE ColumnasTop INTO 'output' USING PigStorage(',');
