@@ -46,7 +46,7 @@ TblPregunta = LOAD 'data.csv' USING PigStorage(',')
 
 TblMes = LOAD 'Mes.csv' USING PigStorage(',') 
 AS ( 
-        Indice: indice,
+        Indice: int,
         NombreIng:chararray,
         NombreEsp:chararray,
 
