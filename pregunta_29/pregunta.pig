@@ -34,7 +34,7 @@ $ pig -x local -f pregunta.pig
         >>> Escriba su respuesta a partir de este punto <<<
 */
 
-TblPregunta = LOAD 'data.csv' USING PigStorage(',') 
+TblPregunta = LOAD 'data.csv' USING PigStorage(',')
     AS ( 
             Indice: int,
             Nombre:chararray,
@@ -44,7 +44,7 @@ TblPregunta = LOAD 'data.csv' USING PigStorage(',')
             Valor:chararray 
     );
 
-TblMes = LOAD 'Mes.csv' USING PigStorage(',') 
+TblMes = LOAD 'Mes.csv' USING PigStorage(',')
         AS ( 
                 Indice: int,
                 NombreIng:chararray,
@@ -57,4 +57,5 @@ Columnas = FOREACH TblPregunta GENERATE Fecha, LOWER(ToString(ToDate(fecha), 'MM
 Mes = FOREACH TblMes GENERATE  NombreIng, NombreEsp;
 Resultado = CROSS Columnas, Mes;
 ResultadoFiltrado = FILTER Resultado BY (NombreMes == NombreIng); 
-ResultadoFinal = FOREACH ResultadoFiltrado GENERATE Fecha, NombreEsp, Mes0, NumeroMes
+ResultadoFinal = FOREACH ResultadoFiltrado GENERATE Fecha, NombreEsp, Mes0, NumeroMes;
+STORE ResultadoFinal INTO 'output' USING PigStorage(',');
