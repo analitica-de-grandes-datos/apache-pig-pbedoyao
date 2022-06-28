@@ -45,12 +45,11 @@ TblPregunta = LOAD 'data.csv' USING PigStorage(',')
     );
 
 TblMes = LOAD 'Mes.csv' USING PigStorage(',') 
-AS ( 
-        Indice: int,
-        NombreIng:chararray,
-        NombreEsp:chararray,
-
-);
+        AS ( 
+                Indice: int,
+                NombreIng:chararray,
+                NombreEsp:chararray
+        );
  
 Columnas = FOREACH TblPregunta GENERATE Fecha, LOWER(ToString(ToDate(fecha), 'MMM')) AS NombreMes, 
                                                    SUBSTRING(fecha,5,7) AS Mes0, 
