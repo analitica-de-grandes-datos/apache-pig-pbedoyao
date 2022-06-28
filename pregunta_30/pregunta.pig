@@ -52,7 +52,7 @@ TblDia = LOAD 'Dia.csv' USING PigStorage(',')
                 NombreDiaEsp:chararray
         );
 
-Columnas = FOREACH TblPregunta GENERATE ToString(Fecha, 'yyyy-MM-dd') AS Fecha, ToString(Fecha, 'dd') AS Dia, ToString(Fecha, 'd') AS DiaUno, ToString(Fecha, 'EEE') AS NombreDia;
+Columnas = FOREACH TblPregunta GENERATE Fecha, ToString(Fecha, 'dd') AS Dia, ToString(Fecha, 'd') AS DiaUno, ToString(Fecha, 'EEE') AS NombreDia;
 Dia = FOREACH TblDia GENERATE  NombreDiaIng, NombreDiaEspCom, NombreDiaEsp;
 
 Resultado = CROSS Columnas, Dia;
