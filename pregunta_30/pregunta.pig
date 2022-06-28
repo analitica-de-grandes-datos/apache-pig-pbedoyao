@@ -53,9 +53,9 @@ TblDia = LOAD 'Dia.csv' USING PigStorage(',')
         );
 
 Columnas = FOREACH TblPregunta GENERATE Fecha, ToString(ToDate(Fecha), 'dd') AS Dia, ToString(ToDate(Fecha), 'd') AS DiaUno,  LOWER(ToString(ToDate(Fecha), 'EEE')) AS NombreDia
-Dia = FOREACH TblDia GENERATE  NombreDiaIng, NombreDiaEspCom, NombreDiaEsp;
+DiaSemanas = FOREACH TblDia GENERATE  NombreDiaIng, NombreDiaEspCom, NombreDiaEsp;
 
-Resultado = CROSS Columnas, Dia;
+Resultado = CROSS Columnas, DiaSemanas;
 ResultadoFiltrado = FILTER Resultado BY (NombreDia == NombreDiaIng); 
 ResultadoFinal = FOREACH ResultadoFiltrado GENERATE Fecha, Dia, DiaUno, NombreDiaEsp, NombreDiaEspCom;
 STORE ResultadoFinal INTO 'output' USING PigStorage(',');
