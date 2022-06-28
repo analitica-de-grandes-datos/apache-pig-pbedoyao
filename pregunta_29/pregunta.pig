@@ -41,8 +41,8 @@ TblPregunta = LOAD 'data.csv' USING PigStorage(',')
             Apellido:chararray,
             Fecha:chararray,
             Color:chararray,
-            Valor:chararray 
-    );
+            Valor:chararray
+        );
 
 TblMes = LOAD 'Mes.csv' USING PigStorage(',')
         AS ( 
@@ -51,10 +51,9 @@ TblMes = LOAD 'Mes.csv' USING PigStorage(',')
                 NombreEsp:chararray
         );
  
-Columnas = FOREACH TblPregunta GENERATE Fecha, LOWER(ToString(ToDate(fecha), 'MMM')) AS NombreMes, 
-                                                   SUBSTRING(fecha,5,7) AS Mes0, 
-                                                   GetMonth(ToDate(fecha)) AS NumeroMes;
+Columnas = FOREACH TblPregunta GENERATE Fecha, LOWER(ToString(ToDate(fecha), 'MMM')) AS NombreMes, SUBSTRING(fecha,5,7) AS Mes0, GetMonth(ToDate(fecha)) AS NumeroMes;
 Mes = FOREACH TblMes GENERATE  NombreIng, NombreEsp;
+
 Resultado = CROSS Columnas, Mes;
 ResultadoFiltrado = FILTER Resultado BY (NombreMes == NombreIng); 
 ResultadoFinal = FOREACH ResultadoFiltrado GENERATE Fecha, NombreEsp, Mes0, NumeroMes;

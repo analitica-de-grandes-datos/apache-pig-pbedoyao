@@ -44,11 +44,18 @@ TblPregunta = LOAD 'data.csv' USING PigStorage(',')
             Valor:chararray 
     );
 
-sub_conjunto = FOREACH ejercicio GENERATE ToString(fecha, 'yyyy-MM-dd') AS fecha, ToString(fecha, 'dd,d') AS dia, ToString(fecha, 'EEE') AS nombre_pdia, ToString(fecha, 'EEEE') AS nombre_dia;
+TblDia = LOAD 'Dia.csv' USING PigStorage(',')
+        AS ( 
+                Indice: int,
+                NombreDiaIng:chararray,
+                NombreDiaEspCom:chararray,
+                NombreDiaEsp:chararray
+        );
 
-colUnidas = FOREACH sub_conjunto GENERATE fecha, dia, (nombre_pdia == 'Mon'? 'lun':(nombre_pdia == 'Tue'? 'mar':(nombre_pdia == 'Wed'? 'mie': 
-(nombre_pdia == 'Thu'? 'jue':(nombre_pdia == 'Fri'? 'vie':(nombre_pdia == 'Sat'? 'sab':(nombre_pdia == 'Sun'? 'dom':'falso'))))))) as diaAbreviado,  
-(nombre_dia == 'Monday'? 'lunes':(nombre_dia == 'Tuesday'? 'martes':(nombre_dia == 'Wednesday'? 'miercoles': 
-(nombre_dia == 'Thursday'? 'jueves':(nombre_dia == 'Friday'? 'viernes':(nombre_dia == 'Saturday'? 'sabado':(nombre_dia == 'Sunday'? 'domingo':'falso'))))))) as diaCompleto; 
+Columnas = FOREACH ejercicio GENERATE ToString(fecha, 'yyyy-MM-dd') AS Fecha, ToString(fecha, 'dd,d') AS Dia, ToString(fecha, 'EEE') AS NombreDia;
+Dia = FOREACH TblDia GENERATE  NombreDiaIng, NombreDiaEspCom, NombreDiaEsp;
 
-STORE colUnidas INTO 'output' USING PigStorage(',');
+Resultado = CROSS Columnas, Dia;
+ResultadoFiltrado = FILTER Resultado BY (NombreDia == NombreDiaIng); 
+ResultadoFinal = FOREACH ResultadoFiltrado GENERATE Fecha, Dia, NombreDiaEsp, NombreDiaEspCom;
+STORE ResultadoFinal INTO 'output' USING PigStorage(',');
