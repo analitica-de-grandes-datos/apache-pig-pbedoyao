@@ -24,8 +24,7 @@ TblPregunta = LOAD 'data.csv' USING PigStorage(',')
             Valor:chararray 
     );
 
-Columna = FOREACH TblPregunta GENERATE GetYear(Fecha) AS ano;
-ColumnaAno = GROUP Columna BY ano;
-ContarAno = FOREACH ColumnaAno GENERATE ano, COUNT(ano); 
-STORE ContarAno INTO 'output' USING PigStorage(',');
+Columna = GROUP TblPregunta BY GetYear(fecha);
+ContarColumna = FOREACH Columna GENERATE group, COUNT(TblPregunta); 
+STORE ContarColumna INTO 'output' USING PigStorage(',');
 
