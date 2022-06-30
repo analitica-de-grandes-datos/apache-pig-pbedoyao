@@ -7,10 +7,20 @@ Para responder la pregunta use el archivo `data.csv`.
 Cuente la cantidad de personas nacidas por año.
 
 Escriba el resultado a la carpeta `output` del directorio actual. Para la 
-evaluación, pig sera eejcutado ejecutado en modo local:
+evaluación, pig sera eejcutado ejecutado en modo local
 
-$ pig -x local -f pregunta.pig
-
-        >>> Escriba su respuesta a partir de este punto <<<
 */
 
+TblPregunta = LOAD 'data.csv' USING PigStorage(',') 
+    AS ( 
+            Indice: int,
+            Nombre:chararray,
+            Apellido:chararray,
+            Fecha:chararray,
+            Color:chararray,
+            Valor:chararray 
+    );
+
+Columna = GROUP TblPregunta BY GetYear(ToDate(Fecha));
+ContarColumna = FOREACH Columna GENERATE group, COUNT(TblPregunta); 
+STORE ContarColumna INTO 'output' USING PigStorage(',');

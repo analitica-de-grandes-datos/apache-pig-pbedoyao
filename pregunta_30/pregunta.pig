@@ -34,3 +34,29 @@ $ pig -x local -f pregunta.pig
         >>> Escriba su respuesta a partir de este punto <<<
 */
 
+TblPregunta = LOAD 'data.csv' USING PigStorage(',') 
+    AS ( 
+            Indice: int,
+            Nombre:chararray,
+            Apellido:chararray,
+            Fecha:chararray,
+            Color:chararray,
+            Valor:chararray 
+    );
+
+TblDia = LOAD 'Dia.csv' USING PigStorage(',')
+        AS ( 
+                Indice: int,
+                NombreDiaIng:chararray,
+                NombreDiaEspCom:chararray,
+                NombreDiaEsp:chararray
+        );
+
+Columnas = FOREACH TblPregunta GENERATE Indice, Fecha, ToString(ToDate(Fecha), 'dd') AS Dia, ToString(ToDate(Fecha), 'd') AS DiaUno,  LOWER(ToString(ToDate(Fecha), 'EEE')) AS NombreDia;
+DiaSemanas = FOREACH TblDia GENERATE  NombreDiaIng, NombreDiaEspCom, NombreDiaEsp;
+
+Resultado = CROSS Columnas, DiaSemanas;
+ResultadoFiltrado = FILTER Resultado BY (NombreDia == NombreDiaIng);
+ResultadoOrdenado = ORDER ResultadoFiltrado BY Indice asc; 
+ResultadoFinal = FOREACH ResultadoOrdenado GENERATE Fecha, Dia, DiaUno, NombreDiaEsp, NombreDiaEspCom;
+STORE ResultadoFinal INTO 'output' USING PigStorage(',');

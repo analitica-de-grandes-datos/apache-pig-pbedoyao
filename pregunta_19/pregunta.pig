@@ -19,7 +19,20 @@ evaluación, pig sera eejcutado ejecutado en modo local:
 
 $ pig -x local -f pregunta.pig
 
-        /* >>> Escriba su respuesta a partir de este punto <<< */
+    >>> Escriba su respuesta a partir de este punto <<<
 
 */
 
+TblPregunta = LOAD 'data.csv' USING PigStorage(',') 
+    AS ( 
+            Indice: int,
+            Nombre:chararray,
+            Apellido:chararray,
+            Fecha:chararray,
+            Color:chararray,
+            Valor:chararray 
+    );
+
+Columnas= FOREACH TblPregunta GENERATE Nombre, Color; 
+FiltroColumnas= FILTER Columnas BY (Color MATCHES '.*^[bB].*'); 
+STORE FiltroColumnas INTO 'output' USING PigStorage(',');

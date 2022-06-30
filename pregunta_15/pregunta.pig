@@ -20,3 +20,16 @@ $ pig -x local -f pregunta.pig
 
 */
 
+TblPregunta = LOAD 'data.csv' USING PigStorage(',') 
+    AS ( 
+            Indice: int,
+            Nombre:chararray,
+            Apellido:chararray,
+            Fecha:chararray,
+            Color:chararray,
+            Valor:chararray 
+    );
+
+Columnas = FOREACH TblPregunta GENERATE Nombre, Color; 
+FiltroColumna= FILTER Columnas BY (Nombre MATCHES '.*^[zZ].*') AND (Color == 'blue'); 
+STORE FiltroColumna INTO 'output' USING PigStorage(' ');
